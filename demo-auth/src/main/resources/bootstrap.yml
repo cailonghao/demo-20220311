@@ -6,16 +6,16 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: ${NACOS_HOST:127.0.0.1}:${NACOS_PORT:8848}
+        server-addr: ${NACOS_HOST:192.168.110.44}:${NACOS_PORT:8848}
         username: nacos
         password: nacos
-        namespace: 214fb80b-f18f-4477-af29-62df76320cc9
+        namespace: 5e594e12-bf11-44e5-9ff2-d02c970873e0
       config:
-        server-addr: ${NACOS_HOST:127.0.0.1}:${NACOS_PORT:8848}
+        server-addr: ${NACOS_HOST:192.168.110.44}:${NACOS_PORT:8848}
         file-extension: yml
-        namespace: 214fb80b-f18f-4477-af29-62df76320cc9
+        namespace: 5e594e12-bf11-44e5-9ff2-d02c970873e0
         shared-configs:
-          - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+          - application.${spring.cloud.nacos.config.file-extension}
         username: ${spring.cloud.nacos.discovery.username}
         password: ${spring.cloud.nacos.discovery.password}
   profiles:

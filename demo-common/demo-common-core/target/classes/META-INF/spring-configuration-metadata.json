@@ -1,0 +1,27 @@
+{
+  "groups": [
+    {
+      "name": "feign.inside",
+      "type": "demo.cloud.common.core.feign.FeignInsideAuthConfig",
+      "sourceType": "demo.cloud.common.core.feign.FeignInsideAuthConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "feign.inside.ips",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "demo.cloud.common.core.feign.FeignInsideAuthConfig"
+    },
+    {
+      "name": "feign.inside.key",
+      "type": "java.lang.String",
+      "sourceType": "demo.cloud.common.core.feign.FeignInsideAuthConfig"
+    },
+    {
+      "name": "feign.inside.secret",
+      "type": "java.lang.String",
+      "sourceType": "demo.cloud.common.core.feign.FeignInsideAuthConfig"
+    }
+  ],
+  "hints": []
+}

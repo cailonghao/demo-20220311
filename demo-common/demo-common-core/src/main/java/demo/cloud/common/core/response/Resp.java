@@ -3,6 +3,7 @@ package demo.cloud.common.core.response;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Data
 public class Resp<T> implements Serializable {
@@ -13,6 +14,11 @@ public class Resp<T> implements Serializable {
     private String msg;
 
     private T data;
+
+    public boolean isSuccess() {
+        return Objects.equals(RespEnum.OK.value(), this.code);
+    }
+
 
     public static <T> Resp<T> succ() {
         Resp<T> resp = new Resp<>();

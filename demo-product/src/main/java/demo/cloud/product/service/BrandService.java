@@ -1,7 +1,7 @@
 package demo.cloud.product.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import demo.api.product.vo.BrandVO;
+import demo.cloud.api.product.vo.BrandVO;
 import demo.cloud.product.entity.Brand;
 
 import java.util.List;

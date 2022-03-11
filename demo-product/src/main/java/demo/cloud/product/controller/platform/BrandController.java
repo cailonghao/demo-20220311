@@ -1,7 +1,7 @@
 package demo.cloud.product.controller.platform;
 
 
-import demo.api.product.vo.BrandVO;
+import demo.cloud.api.product.vo.BrandVO;
 import demo.cloud.common.core.response.Resp;
 import demo.cloud.product.dto.BrandDto;
 import demo.cloud.product.entity.Brand;

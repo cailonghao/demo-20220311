@@ -1,6 +1,6 @@
 package demo.cloud.product.controller.admin;
 
-import demo.api.product.vo.CategoryVO;
+import demo.cloud.api.product.vo.CategoryVO;
 import demo.cloud.common.core.constant.Constant;
 import demo.cloud.common.core.response.Resp;
 import demo.cloud.product.dto.CategoryDto;

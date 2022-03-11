@@ -1,7 +1,9 @@
 package demo.cloud.common.core.common.security.filter;
 
 
-import demo.cloud.common.core.api.auth.bo.UserInfoInTokenBo;
+import demo.cloud.api.auth.bo.UserInfoInTokenBo;
+import demo.cloud.api.auth.feign.TokenFeignClient;
+import demo.cloud.common.core.common.security.AuthUserContext;
 import demo.cloud.common.core.common.security.adapter.AuthConfigAdapter;
 import demo.cloud.common.core.handle.HttpHandler;
 import demo.cloud.common.core.response.Resp;
@@ -26,7 +28,8 @@ public class AuthFilter implements Filter {
     private AuthConfigAdapter authConfigAdapter;
     @Autowired
     private HttpHandler httpHandler;
-
+    @Autowired
+    private TokenFeignClient tokenFeignClient;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -62,9 +65,27 @@ public class AuthFilter implements Filter {
         Resp<UserInfoInTokenBo> userInfoInTokenVoServerResponseEntity = tokenFeignClient
                 .checkToken(accessToken);
         if (!userInfoInTokenVoServerResponseEntity.isSuccess()) {
-            httpHandler.printServerResponseToWeb(ServerResponseEntity.fail(ResponseEnum.UNAUTHORIZED));
+            httpHandler.printServerResponseToWeb(Resp.fail(RespEnum.UNAUTHORIZED));
             return;
         }
+        UserInfoInTokenBo userInfoInToken = userInfoInTokenVoServerResponseEntity.getData();
+
+        // 需要用户角色权限，就去根据用户角色权限判断是否
+//        if (!checkRbac(userInfoInToken,req.getRequestURI(), req.getMethod())) {
+//            httpHandler.printServerResponseToWeb(ServerResponseEntity.fail(ResponseEnum.UNAUTHORIZED));
+//            return;
+//        }
+
+        try {
+            // 保存上下文
+            AuthUserContext.set(userInfoInToken);
+
+            chain.doFilter(req, resp);
+        }
+        finally {
+            AuthUserContext.clean();
+        }
+
     }
 
 

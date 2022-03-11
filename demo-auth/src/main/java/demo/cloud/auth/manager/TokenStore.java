@@ -1,9 +1,9 @@
 package demo.cloud.auth.manager;
 
-import com.github.xiaoymin.knife4j.core.util.StrUtil;
 import demo.cloud.common.cache.constant.OauthCacheNames;
-import demo.cloud.common.core.api.auth.bo.UserInfoInTokenBo;
-import demo.cloud.common.core.api.auth.constant.SysTypeEnum;
+import demo.cloud.api.auth.bo.UserInfoInTokenBo;
+import demo.cloud.api.auth.constant.SysTypeEnum;
+import demo.cloud.api.auth.vo.TokenInfoVo;
 import demo.cloud.common.core.common.security.vo.TokenInfoBo;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.RedisCallback;
@@ -11,12 +11,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Component
 @RefreshScope
@@ -57,16 +55,16 @@ public class TokenStore {
         // 但是每次保存都会更新这个key的时间，而key里面的token有可能会过期，过期就要移除掉
         List<String> existsAccessTokens = new ArrayList<>();
         // 新的token数据
-        existsAccessTokens.add(accessToken + StrUtil.COLON + refreshToken);
+        existsAccessTokens.add(accessToken + ":" + refreshToken);
 
         Long size = redisTemplate.opsForSet().size(uidToAccessKeyStr);
         if (size != null && size != 0) {
             List<String> tokenInfoBoList = stringRedisTemplate.opsForSet().pop(uidToAccessKeyStr, size);
             if (tokenInfoBoList != null) {
                 for (String accessTokenWithRefreshToken : tokenInfoBoList) {
-                    String[] accessTokenWithRefreshTokenArr = accessTokenWithRefreshToken.split(StrUtil.COLON);
+                    String[] accessTokenWithRefreshTokenArr = accessTokenWithRefreshToken.split(":");
                     String accessTokenData = accessTokenWithRefreshTokenArr[0];
-                    if (BooleanUtil.isTrue(stringRedisTemplate.hasKey(getAccessKey(accessTokenData)))) {
+                    if (Boolean.TRUE.equals(stringRedisTemplate.hasKey(getAccessKey(accessTokenData)))) {
                         existsAccessTokens.add(accessTokenWithRefreshToken);
                     }
                 }
@@ -75,7 +73,7 @@ public class TokenStore {
 
         redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
 
-            long expiresIn = tokenInfoBO.getExpiresIn();
+            long expiresIn = tokenInfoBo.getExpiresIn();
 
             byte[] uidKey = uidToAccessKeyStr.getBytes(StandardCharsets.UTF_8);
             byte[] refreshKey = refreshToAccessKeyStr.getBytes(StandardCharsets.UTF_8);
@@ -98,10 +96,10 @@ public class TokenStore {
         });
 
         // 返回给前端是加密的token
-        tokenInfoBO.setAccessToken(encryptToken(accessToken, userInfoInToken.getSysType()));
-        tokenInfoBO.setRefreshToken(encryptToken(refreshToken, userInfoInToken.getSysType()));
+        tokenInfoBo.setAccessToken(encryptToken(accessToken, userInfoInToken.getSysType()));
+        tokenInfoBo.setRefreshToken(encryptToken(refreshToken, userInfoInToken.getSysType()));
 
-        return tokenInfoBO;
+        return tokenInfoBo;
     }
 
     public String getAccessKey(String accessToken) {
@@ -122,4 +120,63 @@ public class TokenStore {
         }
         return expiresIn;
     }
+
+
+    /**
+     * 删除全部的token
+     */
+    public void deleteAllToken(String appId, Long uid) {
+        String uidKey = getUidToAccessKey(getApprovalKey(appId, uid));
+        Long size = redisTemplate.opsForSet().size(uidKey);
+        if (size == null || size == 0) {
+            return;
+        }
+        List<String> tokenInfoBoList = stringRedisTemplate.opsForSet().pop(uidKey, size);
+
+        if (StringUtils.isEmpty(tokenInfoBoList)) {
+            return;
+        }
+
+        for (String accessTokenWithRefreshToken : tokenInfoBoList) {
+            String[] accessTokenWithRefreshTokenArr = accessTokenWithRefreshToken.split(":");
+            String accessToken = accessTokenWithRefreshTokenArr[0];
+            String refreshToken = accessTokenWithRefreshTokenArr[1];
+            redisTemplate.delete(getRefreshToAccessKey(refreshToken));
+            redisTemplate.delete(getAccessKey(accessToken));
+        }
+        redisTemplate.delete(uidKey);
+
+    }
+
+    public String getUidToAccessKey(String approvalKey) {
+        return OauthCacheNames.UID_TO_ACCESS + approvalKey;
+    }
+
+    private static String getApprovalKey(UserInfoInTokenBo userInfoInTokenBo) {
+        return getApprovalKey(userInfoInTokenBo.getSysType().toString(), userInfoInTokenBo.getUid());
+    }
+
+    public String getRefreshToAccessKey(String refreshToken) {
+        return OauthCacheNames.REFRESH_TO_ACCESS + refreshToken;
+    }
+
+    private static String getApprovalKey(String appId, Long uid) {
+        return uid == null ? appId : appId + ":" + uid;
+    }
+
+    private String encryptToken(String accessToken, Integer sysType) {
+//        return Arrays.toString(Base64.encode((accessToken + System.currentTimeMillis() + sysType).getBytes(StandardCharsets.UTF_8)));
+        return Base64.getEncoder().encodeToString((accessToken + System.currentTimeMillis() + sysType).getBytes(StandardCharsets.UTF_8));
+    }
+
+    public TokenInfoVo storeAndGetVo(UserInfoInTokenBo userInfoInToken) {
+        TokenInfoBo tokenInfoBO = storeAccessToken(userInfoInToken);
+
+        TokenInfoVo tokenInfoVO = new TokenInfoVo();
+        tokenInfoVO.setAccessToken(tokenInfoBO.getAccessToken());
+        tokenInfoVO.setRefreshToken(tokenInfoBO.getRefreshToken());
+        tokenInfoVO.setExpiresIn(tokenInfoBO.getExpiresIn());
+        return tokenInfoVO;
+    }
+
 }

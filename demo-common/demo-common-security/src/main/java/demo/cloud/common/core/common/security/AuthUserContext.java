@@ -1,6 +1,6 @@
 package demo.cloud.common.core.common.security;
 
-import demo.cloud.common.core.api.auth.bo.UserInfoInTokenBo;
+import demo.cloud.api.auth.bo.UserInfoInTokenBo;
 
 public class AuthUserContext {
 

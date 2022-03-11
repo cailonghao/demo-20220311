@@ -1,7 +1,7 @@
 package demo.cloud.product.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import demo.api.product.vo.BrandVO;
+import demo.cloud.api.product.vo.BrandVO;
 import demo.cloud.product.entity.Brand;
 import org.apache.ibatis.annotations.Select;
 

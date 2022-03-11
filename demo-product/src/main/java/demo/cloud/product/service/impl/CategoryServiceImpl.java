@@ -1,7 +1,7 @@
 package demo.cloud.product.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import demo.api.product.vo.CategoryVO;
+import demo.cloud.api.product.vo.CategoryVO;
 import demo.cloud.product.dao.CategoryDao;
 import demo.cloud.product.entity.Category;
 import demo.cloud.product.service.CategoryService;

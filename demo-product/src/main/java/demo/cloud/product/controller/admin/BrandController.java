@@ -1,7 +1,7 @@
 package demo.cloud.product.controller.admin;
 
 
-import demo.api.product.vo.BrandVO;
+import demo.cloud.api.product.vo.BrandVO;
 import demo.cloud.common.core.response.Resp;
 import demo.cloud.product.service.BrandService;
 import io.swagger.annotations.ApiImplicitParam;

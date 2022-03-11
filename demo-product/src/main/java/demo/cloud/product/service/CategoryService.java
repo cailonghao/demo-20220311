@@ -1,7 +1,7 @@
 package demo.cloud.product.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import demo.api.product.vo.CategoryVO;
+import demo.cloud.api.product.vo.CategoryVO;
 import demo.cloud.product.entity.Category;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package demo.cloud.common.core.common.security.vo;
 
-import demo.cloud.common.core.api.auth.bo.UserInfoInTokenBo;
+import demo.cloud.api.auth.bo.UserInfoInTokenBo;
 import lombok.Data;
 
 @Data

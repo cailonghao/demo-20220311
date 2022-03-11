@@ -1,7 +1,7 @@
 package demo.cloud.product.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import demo.api.product.vo.BrandVO;
+import demo.cloud.api.product.vo.BrandVO;
 import demo.cloud.common.core.constant.StatusEnum;
 import demo.cloud.product.service.CategoryBrandService;
 import demo.cloud.product.dao.BrandDao;
