@@ -1,0 +1,10 @@
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: demo.cloud.*.mapper
+  configuration:
+    map-underscore-to-camel-case: true #驼峰命名法
+spring:
+  redis:
+    port: 6379
+    host: 192.168.1.10
+    password: 123456

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="demo-api-auth" />
+        <module name="demo-common-database" />
+        <module name="demo-user" />
+        <module name="demo-api-product" />
+        <module name="demo-common-security" />
+        <module name="demo-common-core" />
+        <module name="demo-product" />
+        <module name="demo-api-user" />
+        <module name="demo-auth" />
+        <module name="demo-common-cache" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="demo-api" options="-parameters" />
+      <module name="demo-api-auth" options="-parameters" />
+      <module name="demo-api-product" options="-parameters" />
+      <module name="demo-api-user" options="-parameters" />
+      <module name="demo-auth" options="-parameters" />
+      <module name="demo-common-cache" options="-parameters" />
+      <module name="demo-common-core" options="-parameters" />
+      <module name="demo-common-database" options="-parameters" />
+      <module name="demo-common-security" options="-parameters" />
+      <module name="demo-product" options="-parameters" />
+      <module name="demo-user" options="-parameters" />
+    </option>
+  </component>
+</project>
