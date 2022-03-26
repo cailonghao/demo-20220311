@@ -20,3 +20,26 @@ spring:
         password: ${spring.cloud.nacos.discovery.password}
   profiles:
     active: dev
+seata:
+  enabled: true
+  tx-service-group: default
+  enable-auto-data-source-proxy: true
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: 192.168.110.44:8091
+      username: nacos
+      password: nacos
+      namespace: 5e594e12-bf11-44e5-9ff2-d02c970873e0
+      cluster: default
+      group: SEATA_GROUP
+  config:
+    type: nacos
+    nacos:
+      server-addr: 192.168.110.44:8091
+      group: SEATA_GROUP
+      username: nacos
+      password: nacos
+      namespace:  5e594e12-bf11-44e5-9ff2-d02c970873e0
+      dataId: seataServer.properties

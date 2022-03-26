@@ -13,9 +13,11 @@ import demo.cloud.user.dto.UserRegisterDto;
 import demo.cloud.user.mapper.UserMapper;
 import demo.cloud.user.model.User;
 import demo.cloud.user.service.UserService;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -36,6 +38,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @GlobalTransactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public Long save(UserRegisterDto param) {
         this.checkRegisterInfo(param);
         AuthAccountDto authAccountDTO = new AuthAccountDto();
